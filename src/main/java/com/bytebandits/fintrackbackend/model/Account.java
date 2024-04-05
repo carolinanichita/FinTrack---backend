@@ -6,19 +6,15 @@ import org.hibernate.annotations.GenericGenerator;
 import java.util.List;
 import java.util.UUID;
 
-
 @Entity
-@Table(name = "account")
+@Table(name = "accounts")
 public class Account {
-
     @Id
     @Column(name = "id")
     @GeneratedValue(generator = "uuid-hibernate-generator")
     @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
-    @Column(name = "group_name")
-    private String groupName;
     @Column(name = "account_name")
     private String accountName;
 
@@ -29,14 +25,11 @@ public class Account {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "user_info_id")
-    private UserInfo userInfo;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(mappedBy = "account")
-    private List<IncomeSource> incomeSources;
-
-    @OneToMany(mappedBy = "account")
-    private List<Transaction> transactions;
+    private List<Transaction> transactionList;
 
 
     public UUID getId() {
@@ -45,14 +38,6 @@ public class Account {
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public String getGroupName() {
-        return groupName;
-    }
-
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
     }
 
     public String getAccountName() {
@@ -79,11 +64,12 @@ public class Account {
         this.description = description;
     }
 
-    public UserInfo getUserInfo() {
-        return userInfo;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserInfo(UserInfo userInfo) {
-        this.userInfo = userInfo;
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

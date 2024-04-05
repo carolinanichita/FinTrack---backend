@@ -4,11 +4,10 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "transaction")
+@Table(name = "transactions")
 public class Transaction {
     @Id
     @Column(name = "id")
@@ -24,18 +23,28 @@ public class Transaction {
 
     @Column(name = "date")
     private LocalDate date;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private UserInfo userInfo;
-
-
-    @OneToMany(mappedBy = "transaction")
-    private List<Category> categories;
+    private User user;
 
     @ManyToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    private Category category;
+
+    @ManyToOne(cascade = CascadeType.PERSIST) // Cascade persist operation to associated Account
     @JoinColumn(name = "account_id")
     private Account account;
+    public Transaction() {}
+
+    public Transaction(UUID id, int amount, String description, LocalDate date, User user, Category category, Account account) {
+        this.id = id;
+        this.amount = amount;
+        this.description = description;
+        this.date = date;
+        this.user = user;
+        this.category = category;
+        this.account = account;
+    }
 
     public UUID getId() {
         return id;
@@ -69,20 +78,18 @@ public class Transaction {
         this.date = date;
     }
 
-    public UserInfo getUserInfo() {
-        return userInfo;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserInfo(UserInfo userInfo) {
-        this.userInfo = userInfo;
+    public void setUser(User user) {
+        this.user = user;
     }
-
-    public List<Category> getCategories() {
-        return categories;
+    public Category getCategory() {
+        return category;
     }
-
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public Account getAccount() {
@@ -90,6 +97,10 @@ public class Transaction {
     }
 
     public void setAccount(Account account) {
-        this.account = account;
+        if (account != null) {
+            this.account = account;
+        } else {
+            this.account = new Account(); // Initialize a new Account object if null is provided
+        }
     }
 }

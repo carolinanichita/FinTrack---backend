@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "budget")
+@Table(name = "budgets")
 public class Budget {
     @Id
     @Column(name = "id")
@@ -18,12 +18,13 @@ public class Budget {
     @Column(name = "amount")
     private int amount;
 
-    @OneToOne(mappedBy = "budget")
+    @OneToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "user_info_id")
-    private UserInfo userInfo;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "period")
     private LocalDate period;
@@ -52,12 +53,12 @@ public class Budget {
         this.category = category;
     }
 
-    public UserInfo getUserInfo() {
-        return userInfo;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserInfo(UserInfo userInfo) {
-        this.userInfo = userInfo;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public LocalDate getPeriod() {

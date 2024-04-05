@@ -12,7 +12,6 @@ import java.util.stream.IntStream;
 
 @Service
 public class MonthlyService {
-
     public List<WeekData> getWeeksOfMonth(int year, int month) {
         var results = new ArrayList<WeekData>();
         var yearMonth = Year.of(year).atMonth(month);
@@ -34,11 +33,8 @@ public class MonthlyService {
             if(lastDay.isBefore(currentEndDay)){
                 currentEndDay=lastDay;
             }
-
         }
-
         return results;
-
     }
 
     public List<MonthlyData> getMonthsOfYear(int year){
@@ -46,7 +42,5 @@ public class MonthlyService {
         return IntStream.rangeClosed(1,maxMonth)
                 .mapToObj(month -> new MonthlyData(month, getWeeksOfMonth(year,month)))
                 .toList();
-
     }
-
 }

@@ -7,9 +7,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "category")
+@Table(name = "categories")
 public class Category {
-
     @Id
     @Column(name = "id")
     @GeneratedValue(generator = "uuid-hibernate-generator")
@@ -19,13 +18,18 @@ public class Category {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "transaction_id")
-    private Transaction transaction;
+    @Column(name = "transaction_type")
+    private String transactionType;
 
-    @OneToOne
-    @JoinColumn(name = "budget_id")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    private List<Transaction> transactionList;
+
+    @OneToOne(mappedBy = "category", cascade = CascadeType.ALL)
     private Budget budget;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public UUID getId() {
         return id;
@@ -34,7 +38,6 @@ public class Category {
     public void setId(UUID id) {
         this.id = id;
     }
-
     public String getName() {
         return name;
     }
@@ -42,12 +45,41 @@ public class Category {
     public void setName(String name) {
         this.name = name;
     }
-
-    public Transaction getTransaction() {
-        return transaction;
+    public User getUser() {
+        return user;
+    }
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public List<Transaction> getTransactions() {
+        return transactionList;
     }
 
-    public void setTransaction(Transaction transaction) {
-        this.transaction = transaction;
+    public void setTransactions(List<Transaction> transactionList) {
+        this.transactionList = transactionList;
+    }
+
+    public String getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
+    }
+
+    public List<Transaction> getTransactionList() {
+        return transactionList;
+    }
+
+    public void setTransactionList(List<Transaction> transactionList) {
+        this.transactionList = transactionList;
+    }
+
+    public Budget getBudget() {
+        return budget;
+    }
+
+    public void setBudget(Budget budget) {
+        this.budget = budget;
     }
 }
